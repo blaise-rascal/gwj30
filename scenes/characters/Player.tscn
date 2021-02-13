@@ -19,4 +19,14 @@ shape = SubResource( 1 )
 
 [node name="OnGround" type="RayCast2D" parent="."]
 enabled = true
-cast_to = Vector2( 0, 2 )
+cast_to = Vector2( 0, 1 )
+
+[node name="OnGroundLeft" type="RayCast2D" parent="."]
+position = Vector2( -8, 0 )
+enabled = true
+cast_to = Vector2( 0, 1 )
+
+[node name="OnGroundRight" type="RayCast2D" parent="."]
+position = Vector2( 8, 0 )
+enabled = true
+cast_to = Vector2( 0, 1 )
