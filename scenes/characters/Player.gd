@@ -14,6 +14,7 @@ onready var on_ground_left = $OnGroundLeft
 onready var on_ground_right = $OnGroundRight
 onready var on_left_wall = $OnLeftWall
 onready var on_right_wall = $OnRightWall
+onready var coyote_time = $CoyoteTime
 
 var velocity = Vector2()
 
@@ -23,7 +24,9 @@ func _ready():
 
 
 func is_on_ground():
-	return on_ground.is_colliding() or on_ground_left.is_colliding() or on_ground_right.is_colliding()
+	if on_ground.is_colliding() or on_ground_left.is_colliding() or on_ground_right.is_colliding():
+		coyote_time.start()
+	return coyote_time.time_left > 0
 
 
 func _physics_process(delta):
@@ -73,4 +76,4 @@ func _physics_process(delta):
 		velocity += acceleration * delta
 		if(abs(velocity.x) > MAX_SPEED):
 			velocity.x = clamp(velocity.x, -1, 1) * MAX_SPEED
-	velocity = move_and_slide(velocity, Vector2(0, 1))
+	velocity = move_and_slide(velocity, Vector2(0, -1))

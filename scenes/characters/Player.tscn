@@ -40,3 +40,7 @@ cast_to = Vector2( -5, 0 )
 position = Vector2( 8, -4 )
 enabled = true
 cast_to = Vector2( 4, 0 )
+
+[node name="CoyoteTime" type="Timer" parent="."]
+wait_time = 0.3
+one_shot = true
