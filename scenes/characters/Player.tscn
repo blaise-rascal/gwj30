@@ -34,9 +34,9 @@ cast_to = Vector2( 0, 1 )
 [node name="OnLeftWall" type="RayCast2D" parent="."]
 position = Vector2( -8, -4 )
 enabled = true
-cast_to = Vector2( -3, 0 )
+cast_to = Vector2( -5, 0 )
 
 [node name="OnRightWall" type="RayCast2D" parent="."]
 position = Vector2( 8, -4 )
 enabled = true
-cast_to = Vector2( 3.106, 0 )
+cast_to = Vector2( 4, 0 )

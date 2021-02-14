@@ -1,12 +1,12 @@
 extends KinematicBody2D
 
 const MAX_SPEED : int = 260 # Pixels/second.
-const ACCELERATION_MODIFIER : int = 1200 # Pixels/second
+const ACCELERATION_MODIFIER : int = 1500 # Pixels/second
 const DRAG_COEF : float = -0.999 # Ratio
 const AIR_DRAG : float = -0.3 # Ratio
 const VELOCITY_TO_STOP_DRAGGING : int = 16 # Pixels/second
-const JUMP_ACCELERATION : int = 18 # Some unit, not really sure what tbh
-const WALL_JUMP_ACCELERATION : int = 15 # see above comment
+const JUMP_ACCELERATION : int = 17 # Some unit, not really sure what tbh
+const WALL_JUMP_ACCELERATION : int = 12 # see above comment
 const GRAVITY : int = 1 # See above comment
 
 onready var on_ground = $OnGround
