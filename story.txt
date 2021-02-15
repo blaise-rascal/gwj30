@@ -1,0 +1,37 @@
+MADDY MAYHEM: Spy-For-Hire, in Carnage-A-Trois
+
+(scene one: Maddy, a groovy spy, is standing on a platform suspended over a pit of lava. Hexadecimate, a supervillain wearing a lab coat and goggles, looks on.)
+H: Well, well. The infamous Maddy Mayhem. I thought you'd be more difficult to capture.
+M: Not even a hello? Such ill manners! And what on earth leads you to believe that I am captured?
+H: Oh, I don't know - the fact that my guards found you, stripped you of your weapons, and placed you above a pit of lava, with no chance of escape?
+M: Oh, is that what that awful smell is? Lava? I didn't want to ask, you know, since I didn't want to be rude.
+H: Enough of this nonsense! In five minutes, my megacomputers will launch my beautiful Doomsday Virus, and global domination will finally be within my grasp. I don't expect your body to be able to withstand the heat for that long, but if you do somehow make it, you'll see the dawning of a new age.
+M: Sure, sure. Hey, could you get me a tea? It's awfully chilly in here.
+H: I will do no such thing. Guard! Keep an eye on her.
+
+(Gameplay starts. A tooltip appears, explaining basic movement. You exit the pit by moving around on the platform until it seesaws, until one end is high enough for you to jump out. Then a tooltip appears, instructing you to dash, to take out the guard, who is distracted by a tv. When you take him out, you get his pistol, and a tooltip appears, instructing you how to use it.)
+
+(after you beat the level by destroying all 4 supercomputers, the timer stops, and a tooltip instructs you to head to a certain room to confront Hexadecimate.)
+
+
+H: YOU. You've ruined everything!
+M: Ah! There you are, Hexadecimate. I hereby place you under arrest. Will you come with me willingly?
+H: Your meddling ends here. Charles, kill her!
+(camera pans to reveal Charles, a spy in a tuxedo.)
+C: Maddison! How are you? It's been so long!
+M: Charles? Get out of my way!
+C: Now, now. Is that any way to greet me after all this time? You know, maybe if you weren't so focused on completing your missions, you wouldn't have broken up with me.
+M: I broke up with you because you've turned into this.. this heartless mercenary. Working with Hexadecimate is low, even for you!
+H: Charles! I'm not paying you to chit chat. I'm paying you to kill her!!!
+C: I will, I will. But Maddison, I gotta know: Was there another man? You can tell me. I won't mind.
+M: This is ridiculous. For the last time, get out of my way, Charles.
+C: Sorry, no can do. Goodbye, Maddison.
+
+(you fight)
+
+C: ...
+C: All right, you win. I'll see you around, Maddison.
+(Charles jumps out of the stage.)
+M: Damn, he got away.
+M: As for you; I'll instruct the prison to make sure you never have access to another computer, as long as you live. Frankly, I think less screentime will worlds of good for your health.
+(Text appears: Villain apprehended. You win!)
