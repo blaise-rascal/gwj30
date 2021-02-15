@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://textures/characters/Player.png" type="Texture" id=1]
 [ext_resource path="res://scenes/characters/NewPlayer.gd" type="Script" id=2]
@@ -6,7 +6,14 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8, 8 )
 
+[sub_resource type="CircleShape2D" id=2]
+radius = 8.0
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 7, 7 )
+
 [node name="NewPlayer" type="KinematicBody2D"]
+collision_layer = 0
 script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
@@ -45,5 +52,35 @@ cast_to = Vector2( 4, 0 )
 wait_time = 0.25
 one_shot = true
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="HearbeatDetector" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HearbeatDetector"]
+position = Vector2( 0, -16 )
+shape = SubResource( 2 )
+
+[node name="HeartbeatLabel" type="Label" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -10.0
+margin_top = -32.0
+margin_right = 10.0
+margin_bottom = -24.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2( 0, -8 )
+shape = SubResource( 3 )
+
+[node name="CameraPosition" type="Position2D" parent="."]
+
+[node name="Camera2D" type="Camera2D" parent="CameraPosition"]
 current = true
+[connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
