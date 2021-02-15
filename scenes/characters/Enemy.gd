@@ -15,4 +15,4 @@ func find_target(player_pos, player_vel):
 
 func _physics_process(delta):
 	# Aiming now works
-	global_rotation = find_target(get_parent().get_node("Player").global_position, get_parent().get_node("Player").velocity)
+	global_rotation = find_target(get_parent().get_node("NewPlayer").global_position, get_parent().get_node("Player").velocity)
