@@ -23,14 +23,13 @@ func hurt(damage):
 
 # Find the position to target
 func find_target(player_pos, player_vel):
-	var target_position = player_pos + Vector2(0, -8)
-	target_position += ESTIMATED_BULLET_TIME * player_vel
+	var target_position = player_pos + Globals.ADJUSTMENT_TO_CENTER_OF_PLAYER
 	return atan2((target_position.y - global_position.y), (target_position.x - global_position.x))
 
 
 func _physics_process(delta):
 	# Aiming now works
-	global_rotation = find_target(get_parent().get_node("NewPlayer").global_position, get_parent().get_node("NewPlayer").velocity)
+	global_rotation = find_target(get_parent().get_node("Player").global_position, get_parent().get_node("Player").velocity)
 
 
 func _on_ShootTimer_timeout():
