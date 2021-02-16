@@ -1,8 +1,8 @@
 extends Area2D
 
-const HEARTBEAT_GIVER = preload("res://scenes/characters/HeartbeatGiver.tscn")
 
-export (Vector2) var VELOCITY = Vector2(350, 0)
+
+export (Vector2) var VELOCITY = Vector2(1200, 0)
 export (int) var DAMAGE = 5
 
 func _physics_process(delta):
