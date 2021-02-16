@@ -29,7 +29,7 @@ material = SubResource( 2 )
 texture = ExtResource( 2 )
 
 [node name="ShootTimer" type="Timer" parent="."]
-wait_time = 3.0
+wait_time = 0.5
 autostart = true
 
 [node name="Hurtbox" type="Area2D" parent="."]

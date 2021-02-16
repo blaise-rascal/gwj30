@@ -1,6 +1,6 @@
 extends Node2D
 
-const BULLET = preload("res://scenes/characters/BlaiseBullet.tscn")
+const BULLET = preload("res://scenes/characters/Bullet.tscn")
 
 const ESTIMATED_BULLET_TIME : float = 0.18 # estimated time for bullet to hit player in seconds for aiming purposes
 
