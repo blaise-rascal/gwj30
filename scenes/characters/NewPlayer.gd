@@ -14,6 +14,10 @@ const REGULAR_GRAVITY : int = 2200 #Pixels/second2
 const GRAVITY_WITH_UP_HELD : int = 1100 #Pixels/second2
 #TODO: maybe increase gravity if you hold down? like celeste?
 
+const HEARTBEAT_INC : int = 50 # Heartbeat/second (out of 100)
+const HEARTBEAT_RADIUS : int = 120 # Maximum distance from enemy where heartbeat is generated
+const HEARTBEAT_DECREASE_AMOUNT : int = 30 # Decrease in heartbeat per second when not near enemies
+
 const MAX_HEALTH = 100
 
 onready var on_ground = $OnGround
@@ -22,6 +26,7 @@ onready var on_ground_right = $OnGroundRight
 onready var on_left_wall = $OnLeftWall
 onready var on_right_wall = $OnRightWall
 onready var coyote_time = $CoyoteTime
+onready var heartbeat_detection = $HearbeatDetector
 onready var cam_pos = $CameraPosition
 
 var health = MAX_HEALTH

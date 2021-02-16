@@ -13,6 +13,7 @@ func target_enemy():
 
 func target_player():
 	set_collision_layer_bit(2, true)
+	add_child(HEARTBEAT_GIVER.instance())
 
 
 func _on_Bullet_body_entered(body):
