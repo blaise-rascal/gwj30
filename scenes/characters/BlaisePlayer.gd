@@ -1,20 +1,22 @@
 extends KinematicBody2D
 
-const BULLET = preload("res://scenes/characters/Bullet.tscn")
+const BULLET = preload("res://scenes/characters/BlaiseBullet.tscn")
 
-const MAX_SPEED : int = 260 # Pixels/second.
-const LEFT_RIGHT_ACCELERATION: int = 1700 # Pixels/second2
+const MAX_SPEED : int = 240 # Pixels/second.
+const LEFT_RIGHT_ACCELERATION: int = 1600 # Pixels/second2
 const GROUND_DRAG_DECELERATION : int = 700 # Pixels/second2
 const AIR_DRAG_DECELERATION : int = 700 # Pixels/second2
 const VELOCITY_TO_STOP_DRAGGING : int = 16 # Pixels/second
-const JUMP_VERTICAL_VELOCITY : int = 400 # Pixels/second
-const WALL_JUMP_VERTICAL_VELOCITY : int = 300 # Pixels/second
+const JUMP_VERTICAL_VELOCITY : int = 380 # Pixels/second
+const WALL_JUMP_VERTICAL_VELOCITY : int = 250 # Pixels/second
 const WALL_JUMP_HORIZONTAL_VELOCITY : int = 260 # Pixels/second
-const REGULAR_GRAVITY : int = 2200 #Pixels/second2
-const GRAVITY_WITH_UP_HELD : int = 1100 #Pixels/second2
+const REGULAR_GRAVITY : int = 2000 #Pixels/second2
+const GRAVITY_WITH_UP_HELD : int = 1000 #Pixels/second2
+const DEFAULT_CAMERA_POSITION = Vector2(0,-36)
 #TODO: maybe increase gravity if you hold down? like celeste?
 
 const MAX_HEALTH = 100
+const MAX_BULLETS = 6
 
 onready var on_ground = $OnGround
 onready var on_ground_left = $OnGroundLeft
@@ -25,9 +27,8 @@ onready var coyote_time = $CoyoteTime
 onready var cam_pos = $CameraPosition
 
 var health = MAX_HEALTH
+var bullets = MAX_BULLETS
 var velocity = Vector2()
-var heartbeat = 0
-var heartbeat_max = 100
 var facing_direction = 1 # 1 is right, -1 is left
 
 func die():
@@ -45,21 +46,18 @@ func is_on_ground():
 		coyote_time.start()
 	return coyote_time.time_left > 0
 
-
 func _process(delta):
-	# Increment heartbeat based on each nearby enemy
-	for enemy in heartbeat_detection.get_overlapping_areas():
-		heartbeat += lerp(HEARTBEAT_INC, 0, heartbeat_detection.global_position.distance_to(enemy.global_position) / HEARTBEAT_RADIUS) * delta
-	
-	# Decrement heartbeat when no enemies are around
-	if heartbeat_detection.get_overlapping_areas().size() == 0:
-		heartbeat -= HEARTBEAT_DECREASE_AMOUNT * delta
-	
-	heartbeat = clamp(heartbeat, 0, heartbeat_max)
-	
-	# TEMPORARY
-	$HeartbeatLabel.text = str(heartbeat)
+	if(Input.is_action_pressed("pancamera")):
+		var PanAlongVector = get_local_mouse_position() - Globals.ADJUSTMENT_TO_CENTER_OF_PLAYER - DEFAULT_CAMERA_POSITION
+		#$CameraPosition.position = Vector2(PanAlongVector.length()*.5,0).rotated(_get_angle_from_sprite_center_to_mouse())
+		$CameraPosition.position = PanAlongVector*.5
+	else:
+		$CameraPosition.position = DEFAULT_CAMERA_POSITION
 
+
+
+func _get_angle_from_sprite_center_to_mouse():
+	return atan2(get_local_mouse_position().y - Globals.ADJUSTMENT_TO_CENTER_OF_PLAYER.y, get_local_mouse_position().x - Globals.ADJUSTMENT_TO_CENTER_OF_PLAYER.x)
 
 func _physics_process(delta):
 	var acceleration = Vector2(0,0)  # The player's movement vector.
@@ -118,8 +116,7 @@ func _physics_process(delta):
 		if(abs(velocity.x) > MAX_SPEED):
 			velocity.x = clamp(velocity.x, -1, 1) * MAX_SPEED
 	
-	# Move camera ahead of player
-	cam_pos.position = lerp(cam_pos.position, velocity * delta * 3, 0.1)
+
 	
 	velocity = move_and_slide(velocity, Vector2(0, -1))
 
@@ -127,8 +124,12 @@ func _physics_process(delta):
 func _unhandled_input(event):
 	if event.is_action_pressed("shoot"):
 		var bullet = BULLET.instance()
-		bullet.global_position = global_position + Vector2(0, -8)
-		bullet.global_rotation = Vector2(facing_direction + clamp(velocity.x, -1, 1), int(Input.is_action_pressed("down")) - int(Input.is_action_pressed("up"))).angle()
+		var adjustedglobalposition = global_position + Globals.ADJUSTMENT_TO_CENTER_OF_PLAYER
+		#var adjustedlocalposition = position + Globals.ADJUSTMENT_TO_CENTER_OF_PLAYER
+		bullet.global_position = adjustedglobalposition
+		
+		bullet.global_rotation = _get_angle_from_sprite_center_to_mouse()
+		print(get_local_mouse_position())
 		bullet.target_enemy()
 		get_tree().get_root().add_child(bullet)
 
