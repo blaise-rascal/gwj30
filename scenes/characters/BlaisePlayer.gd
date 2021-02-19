@@ -13,6 +13,9 @@ const WALL_JUMP_HORIZONTAL_VELOCITY : int = 260 # Pixels/second
 const REGULAR_GRAVITY : int = 2000 #Pixels/second2
 const GRAVITY_WITH_UP_HELD : int = 1000 #Pixels/second2
 const DEFAULT_CAMERA_POSITION = Vector2(0,-36)
+const HEARTBEAT_INC : int = 50 # Heartbeat/second
+const HEARTBEAT_RADIUS : int = 120 # Maximum distance from enemy where heartbeat is generated
+const HEARTBEAT_DECREASE_AMOUNT : int = 5 # Decrease in heartbeat per second when not near enemies
 #TODO: maybe increase gravity if you hold down? like celeste?
 
 const MAX_HEALTH = 100
@@ -25,6 +28,7 @@ onready var on_left_wall = $OnLeftWall
 onready var on_right_wall = $OnRightWall
 onready var coyote_time = $CoyoteTime
 onready var cam_pos = $CameraPosition
+onready var heartbeat_detection = $HeartbeatDetector
 
 var health = MAX_HEALTH
 var bullets = MAX_BULLETS
@@ -52,7 +56,18 @@ func _process(delta):
 		#$CameraPosition.position = Vector2(PanAlongVector.length()*.5,0).rotated(_get_angle_from_sprite_center_to_mouse())
 		$CameraPosition.position = PanAlongVector*.5
 	else:
-		$CameraPosition.position = DEFAULT_CAMERA_POSITION
+		$CameraPosition.position = DEFAULT_CAMERA_POSITION + velocity / 5
+	
+	
+	# Increment heartbeat based on each nearby enemy
+	for enemy in heartbeat_detection.get_overlapping_areas():
+		Globals.heartbeat += lerp(HEARTBEAT_INC, 0, heartbeat_detection.global_position.distance_to(enemy.global_position) / HEARTBEAT_RADIUS) * delta
+	
+	# Decrement heartbeat when no enemies are around
+	if heartbeat_detection.get_overlapping_areas().size() == 0:
+		Globals.heartbeat -= HEARTBEAT_DECREASE_AMOUNT * delta
+	
+	Globals.heartbeat = clamp(Globals.heartbeat, 0, 100)
 
 
 
@@ -118,7 +133,7 @@ func _physics_process(delta):
 	
 
 	
-	velocity = move_and_slide(velocity, Vector2(0, -1))
+	velocity = move_and_slide_with_snap(velocity, Vector2(0, -1))
 
 
 func _unhandled_input(event):
@@ -136,3 +151,4 @@ func _unhandled_input(event):
 func _on_Hurtbox_area_entered(bullet):
 	hurt(bullet.DAMAGE)
 	bullet.queue_free()
+

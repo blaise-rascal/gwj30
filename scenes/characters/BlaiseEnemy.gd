@@ -4,7 +4,7 @@ const BULLET = preload("res://scenes/characters/BlaiseBullet.tscn")
 
 const ESTIMATED_BULLET_TIME : float = 0.18 # estimated time for bullet to hit player in seconds for aiming purposes
 
-const MAX_HEALTH = 30
+const MAX_HEALTH = 20
 
 var health = MAX_HEALTH
 var current_rotation_speed = 0
@@ -29,7 +29,7 @@ func find_target(player_pos, player_vel):
 
 func _physics_process(delta):
 	# Aiming now works
-	global_rotation = find_target(get_parent().get_node("Player").global_position, get_parent().get_node("Player").velocity)
+	global_rotation = find_target(get_parent().get_parent().get_node("Player").global_position, get_parent().get_parent().get_node("Player").velocity)
 
 
 func _on_ShootTimer_timeout():

@@ -8,6 +8,7 @@ var ADJUSTMENT_TO_CENTER_OF_PLAYER = Vector2(0,-8)
 #In
 # var b = "text"
 
+var heartbeat = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

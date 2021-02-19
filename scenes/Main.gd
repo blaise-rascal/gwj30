@@ -21,15 +21,17 @@ func _process(delta):
 func _update_ui():
 	$UILayer/HPLabel.text = "HP: " + str($Player.health)
 #	$UILayer/BulletsLabel.text = "Bullets: " + str($Player.)
+	$UILayer/HeartbeatLabel.text = "Heartbeat: " + str(Globals.heartbeat)
 
 func _unhandled_input(event):
-	if event.is_action_pressed("bullettime") && bullettime == false:
+	if event.is_action_pressed("bullettime") && bullettime == false && Globals.heartbeat > 70:
 		$CanvasModulate.set_color(Color(0.8,0.8,1))
-		Engine.time_scale =.3
+		Engine.time_scale = Globals.SLOW_TIME_SCALE
 		$BulletTimeDuration.start()
+		Globals.heartbeat = 30
 
 
 func _on_BulletTimeDuration_timeout():
 	print("")
-	Engine.time_scale =1
+	Engine.time_scale = 1
 	$CanvasModulate.set_color(Color(1,1,1))
