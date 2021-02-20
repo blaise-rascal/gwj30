@@ -52,8 +52,6 @@ func shootbullet():
 	bullet.global_rotation = find_target(get_parent().get_parent().get_node("Player").global_position, get_parent().get_parent().get_node("Player").velocity)
 	bullet.target_player()
 	get_tree().get_root().add_child(bullet)
-	print("This z: ", str(z_index))
-	print("bullet z: ", str(bullet.z_index))
 	
 
 

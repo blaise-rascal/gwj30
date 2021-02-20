@@ -106,10 +106,8 @@ func _physics_process(delta):
 		
 		# Apply gravity
 		if(Input.is_action_pressed("jump") && velocity.y<0): #If you're jumping and the up button is held, make gravity lower
-			#print("UP HELD")
 			acceleration.y = GRAVITY_WITH_UP_HELD
 		else:
-			#print("REGULAR GRAVITY")
 			acceleration.y = REGULAR_GRAVITY
 		
 		#Apply drag
@@ -144,6 +142,7 @@ func _physics_process(delta):
 
 func _unhandled_input(event):
 	if event.is_action_pressed("shoot"):
+		print("PLAYER SHOOTING")
 		var bullet = BULLET.instance()
 		var adjustedglobalposition = global_position + Globals.ADJUSTMENT_TO_CENTER_OF_PLAYER
 		#var adjustedlocalposition = position + Globals.ADJUSTMENT_TO_CENTER_OF_PLAYER
