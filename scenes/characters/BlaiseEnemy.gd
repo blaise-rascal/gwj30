@@ -12,7 +12,9 @@ var alive = true
 export var baserotation = 0
 
 func _ready():
-	$StaticPart.rotation_degrees = baserotation
+	for child in get_children():
+		if(child.is_in_group("BaseRotates")):
+			child.rotation_degrees = baserotation
 
 func die():
 	alive = false
@@ -38,7 +40,7 @@ func _physics_process(delta):
 	#$RotatingPart.rotate(find_target(get_parent().get_parent().get_node("Player").global_position, get_parent().get_parent().get_node("Player").velocity))
 	
 	if(alive):
-		$RotatingPart.global_rotation = find_target(get_parent().get_parent().get_node("Player").global_position, get_parent().get_parent().get_node("Player").velocity)
+		$Barrel.global_rotation = find_target(get_parent().get_parent().get_node("Player").global_position, get_parent().get_parent().get_node("Player").velocity)
 
 
 func _on_ShootTimer_timeout():
@@ -50,9 +52,12 @@ func shootbullet():
 	bullet.global_rotation = find_target(get_parent().get_parent().get_node("Player").global_position, get_parent().get_parent().get_node("Player").velocity)
 	bullet.target_player()
 	get_tree().get_root().add_child(bullet)
+	print("This z: ", str(z_index))
+	print("bullet z: ", str(bullet.z_index))
 	
 
 
 func _on_Hurtbox_area_entered(bullet):
-	hurt(bullet.DAMAGE)
+	if(alive):
+		hurt(bullet.DAMAGE)
 	bullet.queue_free()

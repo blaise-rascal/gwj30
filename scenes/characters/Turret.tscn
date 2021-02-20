@@ -5,10 +5,10 @@
 [ext_resource path="res://textures/characters/turret-base-sheet.png" type="Texture" id=3]
 [ext_resource path="res://textures/effects/explosion-sheet.png" type="Texture" id=4]
 
-[sub_resource type="RectangleShape2D" id=3]
+[sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8, 8 )
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=2]
 resource_name = "die"
 tracks/0/type = "value"
 tracks/0/path = NodePath("Explosion:visible")
@@ -35,7 +35,7 @@ tracks/1/keys = {
 "values": [ 0, 1, 2, 3 ]
 }
 tracks/2/type = "value"
-tracks/2/path = NodePath("RotatingPart:frame")
+tracks/2/path = NodePath("Barrel:frame")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/imported = false
@@ -47,7 +47,7 @@ tracks/2/keys = {
 "values": [ 0, 4 ]
 }
 tracks/3/type = "value"
-tracks/3/path = NodePath("StaticPart:frame")
+tracks/3/path = NodePath("Base:frame")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/imported = false
@@ -59,10 +59,10 @@ tracks/3/keys = {
 "values": [ 0, 1 ]
 }
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=3]
 resource_name = "idle"
 tracks/0/type = "value"
-tracks/0/path = NodePath("RotatingPart:frame")
+tracks/0/path = NodePath("Barrel:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -74,11 +74,11 @@ tracks/0/keys = {
 "values": [ 0 ]
 }
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=4]
 resource_name = "shoot"
 length = 0.4
 tracks/0/type = "value"
-tracks/0/path = NodePath("RotatingPart:frame")
+tracks/0/path = NodePath("Barrel:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -105,14 +105,20 @@ tracks/1/keys = {
 }
 
 [node name="Turret" type="Node2D"]
+z_index = 300
+z_as_relative = false
 script = ExtResource( 1 )
 
-[node name="RotatingPart" type="Sprite" parent="."]
+[node name="Barrel" type="Sprite" parent="." groups=[
+"RotateToPlayer",
+]]
 position = Vector2( 0, 0.5 )
 texture = ExtResource( 2 )
 hframes = 5
 
-[node name="StaticPart" type="Sprite" parent="."]
+[node name="Base" type="Sprite" parent="." groups=[
+"BaseRotates",
+]]
 position = Vector2( 0, 0.5 )
 texture = ExtResource( 3 )
 hframes = 2
@@ -127,18 +133,22 @@ collision_mask = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
 position = Vector2( 8, 0 )
-shape = SubResource( 3 )
+shape = SubResource( 1 )
 
 [node name="anims" type="AnimationPlayer" parent="."]
 autoplay = "idle"
-anims/die = SubResource( 6 )
-anims/idle = SubResource( 4 )
-anims/shoot = SubResource( 5 )
+anims/die = SubResource( 2 )
+anims/idle = SubResource( 3 )
+anims/shoot = SubResource( 4 )
 
-[node name="Explosion" type="Sprite" parent="."]
+[node name="Explosion" type="Sprite" parent="." groups=[
+"BaseRotates",
+]]
 visible = false
-position = Vector2( 7, 0 )
+z_index = 600
+z_as_relative = false
 texture = ExtResource( 4 )
+offset = Vector2( 7, -2 )
 hframes = 4
 [connection signal="timeout" from="ShootTimer" to="." method="_on_ShootTimer_timeout"]
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]

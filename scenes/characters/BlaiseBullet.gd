@@ -18,4 +18,5 @@ func target_player():
 	add_child(HEARTBEAT_GIVER.instance())
 
 func _on_Bullet_body_entered(body):
+	print(body)
 	queue_free()

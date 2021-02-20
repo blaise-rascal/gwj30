@@ -13,6 +13,8 @@ extents = Vector2( 7, 7 )
 radius = 8.0
 
 [node name="BlaisePlayer" type="KinematicBody2D"]
+z_index = 400
+z_as_relative = false
 collision_layer = 0
 script = ExtResource( 2 )
 
