@@ -114,6 +114,7 @@ script = ExtResource( 1 )
 ]]
 position = Vector2( 0, 0.5 )
 texture = ExtResource( 2 )
+offset = Vector2( 0, 0.5 )
 hframes = 5
 
 [node name="Base" type="Sprite" parent="." groups=[
@@ -121,6 +122,7 @@ hframes = 5
 ]]
 position = Vector2( 0, 0.5 )
 texture = ExtResource( 3 )
+offset = Vector2( 0, 0.5 )
 hframes = 2
 
 [node name="ShootTimer" type="Timer" parent="."]
@@ -132,7 +134,7 @@ collision_layer = 0
 collision_mask = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
-position = Vector2( 8, 0 )
+position = Vector2( 8, 0.5 )
 shape = SubResource( 1 )
 
 [node name="anims" type="AnimationPlayer" parent="."]
