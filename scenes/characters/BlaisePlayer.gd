@@ -12,10 +12,11 @@ const WALL_JUMP_VERTICAL_VELOCITY : int = 250 # Pixels/second
 const WALL_JUMP_HORIZONTAL_VELOCITY : int = 260 # Pixels/second
 const REGULAR_GRAVITY : int = 2000 #Pixels/second2
 const GRAVITY_WITH_UP_HELD : int = 1000 #Pixels/second2
-const DEFAULT_CAMERA_POSITION = Vector2(0,-36)
+const DEFAULT_CAMERA_POSITION = Vector2(0,-20)
 const HEARTBEAT_INC : int = 50 # Heartbeat/second
 const HEARTBEAT_RADIUS : int = 120 # Maximum distance from enemy where heartbeat is generated
 const HEARTBEAT_DECREASE_AMOUNT : int = 5 # Decrease in heartbeat per second when not near enemies
+const DASH_SPEED : int = 400 # Pixels / second
 #TODO: maybe increase gravity if you hold down? like celeste?
 
 const MAX_HEALTH = 100
@@ -29,11 +30,14 @@ onready var on_right_wall = $OnRightWall
 onready var coyote_time = $CoyoteTime
 onready var cam_pos = $CameraPosition
 onready var heartbeat_detection = $HeartbeatDetector
+onready var dash_timer = $DashTimer
 
 var health = MAX_HEALTH
 var bullets = MAX_BULLETS
 var velocity = Vector2()
 var facing_direction = 1 # 1 is right, -1 is left
+var dashing = false
+var dash_direction = Vector2()
 
 func die():
 	get_tree().quit()   
@@ -75,65 +79,67 @@ func _get_angle_from_sprite_center_to_mouse():
 	return atan2(get_local_mouse_position().y - Globals.ADJUSTMENT_TO_CENTER_OF_PLAYER.y, get_local_mouse_position().x - Globals.ADJUSTMENT_TO_CENTER_OF_PLAYER.x)
 
 func _physics_process(delta):
-	var acceleration = Vector2(0,0)  # The player's movement vector.
-	
-	#ACCELERATION IS CALCULATED EVERY FRAME FROM SCRATCH
-	#VELOCITY IS PRESERVED FROM FRAME TO FRAME, BUT MODIFIED BY ACCELERATION (AND SOMETIMES SET EXPLICITY, LIKE WHEN YOU JUMP)
-	
-	if Input.is_action_pressed("right"): #TODO: Make it so that it only adds walk acceleration if the velocity is not too high already (rather than handling this case later on)
-		acceleration.x = LEFT_RIGHT_ACCELERATION
-		facing_direction = 1
-	if Input.is_action_pressed("left"):
-		acceleration.x = -LEFT_RIGHT_ACCELERATION
-		facing_direction = -1
-	if Input.is_action_just_pressed("jump"):
-		if is_on_ground():
-			velocity.y = -JUMP_VERTICAL_VELOCITY
-		elif on_left_wall.is_colliding():
-			velocity.y = -WALL_JUMP_VERTICAL_VELOCITY
-			velocity.x = WALL_JUMP_HORIZONTAL_VELOCITY
-		elif on_right_wall.is_colliding():
-			velocity.y = -WALL_JUMP_VERTICAL_VELOCITY
-			velocity.x = -WALL_JUMP_HORIZONTAL_VELOCITY
-
-	
-	# Apply gravity
-	if(Input.is_action_pressed("jump") && velocity.y<0): #If you're jumping and the up button is held, make gravity lower
-		#print("UP HELD")
-		acceleration.y = GRAVITY_WITH_UP_HELD
+	if dashing:
+		velocity = dash_direction * DASH_SPEED
 	else:
-		#print("REGULAR GRAVITY")
-		acceleration.y = REGULAR_GRAVITY
-	
-	#Apply drag
-	if acceleration.x == 0:
-		#$CharAnims.play("idle")
-		#VELOCITY_TO_STOP_DRAGGING is the (very slow) speed where, if the player is moving below that speed, their velocity is set to zero.
-		#Used to prevent rapid switching of directions when they coast to a halt.
-		if(abs(velocity.x) > VELOCITY_TO_STOP_DRAGGING) :
+		var acceleration = Vector2(0,0)  # The player's movement vector.
+		
+		#ACCELERATION IS CALCULATED EVERY FRAME FROM SCRATCH
+		#VELOCITY IS PRESERVED FROM FRAME TO FRAME, BUT MODIFIED BY ACCELERATION (AND SOMETIMES SET EXPLICITY, LIKE WHEN YOU JUMP)
+		
+		if Input.is_action_pressed("right"): #TODO: Make it so that it only adds walk acceleration if the velocity is not too high already (rather than handling this case later on)
+			acceleration.x = LEFT_RIGHT_ACCELERATION
+			facing_direction = 1
+		if Input.is_action_pressed("left"):
+			acceleration.x = -LEFT_RIGHT_ACCELERATION
+			facing_direction = -1
+		if Input.is_action_just_pressed("jump"):
 			if is_on_ground():
-				acceleration.x = -GROUND_DRAG_DECELERATION * clamp(velocity.x, -1, 1)
-			else:
-				acceleration.x = -AIR_DRAG_DECELERATION * clamp(velocity.x, -1, 1)
-		else:
-			velocity.x = 0
-#	else:
-#		if(acceleration.x >0):
-#			$Sprite.flip_h=true
-#		elif(acceleration.x <0):
-#			$Sprite.flip_h=false
-#		$CharAnims.play("walk")
-	
-	# Apply acceleration
-	if acceleration.length() > 0:
-		velocity += acceleration * delta
-		#Clamp velocity to max
-		if(abs(velocity.x) > MAX_SPEED):
-			velocity.x = clamp(velocity.x, -1, 1) * MAX_SPEED
-	
+				velocity.y = -JUMP_VERTICAL_VELOCITY
+			elif on_left_wall.is_colliding():
+				velocity.y = -WALL_JUMP_VERTICAL_VELOCITY
+				velocity.x = WALL_JUMP_HORIZONTAL_VELOCITY
+			elif on_right_wall.is_colliding():
+				velocity.y = -WALL_JUMP_VERTICAL_VELOCITY
+				velocity.x = -WALL_JUMP_HORIZONTAL_VELOCITY
 
+		
+		# Apply gravity
+		if(Input.is_action_pressed("jump") && velocity.y<0): #If you're jumping and the up button is held, make gravity lower
+			#print("UP HELD")
+			acceleration.y = GRAVITY_WITH_UP_HELD
+		else:
+			#print("REGULAR GRAVITY")
+			acceleration.y = REGULAR_GRAVITY
+		
+		#Apply drag
+		if acceleration.x == 0:
+			#$CharAnims.play("idle")
+			#VELOCITY_TO_STOP_DRAGGING is the (very slow) speed where, if the player is moving below that speed, their velocity is set to zero.
+			#Used to prevent rapid switching of directions when they coast to a halt.
+			if(abs(velocity.x) > VELOCITY_TO_STOP_DRAGGING) :
+				if is_on_ground():
+					acceleration.x = -GROUND_DRAG_DECELERATION * clamp(velocity.x, -1, 1)
+				else:
+					acceleration.x = -AIR_DRAG_DECELERATION * clamp(velocity.x, -1, 1)
+			else:
+				velocity.x = 0
+	#	else:
+	#		if(acceleration.x >0):
+	#			$Sprite.flip_h=true
+	#		elif(acceleration.x <0):
+	#			$Sprite.flip_h=false
+	#		$CharAnims.play("walk")
+		
+		# Apply acceleration
+		if acceleration.length() > 0:
+			velocity += acceleration * delta
+			#Clamp velocity to max
+			if(abs(velocity.x) > MAX_SPEED):
+				velocity.x = clamp(velocity.x, -1, 1) * MAX_SPEED
 	
-	velocity = move_and_slide_with_snap(velocity, Vector2(0, -1))
+	
+	velocity = move_and_slide(velocity, Vector2(0, -1))
 
 
 func _unhandled_input(event):
@@ -147,8 +153,19 @@ func _unhandled_input(event):
 		print(get_local_mouse_position())
 		bullet.target_enemy()
 		get_tree().get_root().add_child(bullet)
+	
+	if event.is_action_pressed("dash") and Globals.heartbeat > 10:
+		dashing = true
+		dash_direction = Vector2(int(Input.is_action_pressed("right")) - int(Input.is_action_pressed("left")), 
+								int(Input.is_action_pressed("down")) - int(Input.is_action_pressed("up"))).normalized()
+		dash_timer.start()
+		Globals.heartbeat -= 10
 
 func _on_Hurtbox_area_entered(bullet):
 	hurt(bullet.DAMAGE)
 	bullet.queue_free()
 
+
+
+func _on_DashTimer_timeout():
+	dashing = false
