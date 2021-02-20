@@ -5,13 +5,19 @@ const BULLET = preload("res://scenes/characters/BlaiseBullet.tscn")
 const ESTIMATED_BULLET_TIME : float = 0.18 # estimated time for bullet to hit player in seconds for aiming purposes
 
 const MAX_HEALTH = 20
-
 var health = MAX_HEALTH
 var current_rotation_speed = 0
+var alive = true
+#The export vars are used to differentiate the different enemies
+export var baserotation = 0
 
+func _ready():
+	$StaticPart.rotation_degrees = baserotation
 
 func die():
-	queue_free()
+	alive = false
+	$ShootTimer.stop()
+	$anims.play("die")
 
 
 func hurt(damage):
@@ -29,15 +35,22 @@ func find_target(player_pos, player_vel):
 
 func _physics_process(delta):
 	# Aiming now works
-	global_rotation = find_target(get_parent().get_parent().get_node("Player").global_position, get_parent().get_parent().get_node("Player").velocity)
+	#$RotatingPart.rotate(find_target(get_parent().get_parent().get_node("Player").global_position, get_parent().get_parent().get_node("Player").velocity))
+	
+	if(alive):
+		$RotatingPart.global_rotation = find_target(get_parent().get_parent().get_node("Player").global_position, get_parent().get_parent().get_node("Player").velocity)
 
 
 func _on_ShootTimer_timeout():
+	$anims.play("shoot")
+
+func shootbullet():
 	var bullet = BULLET.instance()
 	bullet.global_position = global_position
-	bullet.global_rotation = global_rotation
+	bullet.global_rotation = find_target(get_parent().get_parent().get_node("Player").global_position, get_parent().get_parent().get_node("Player").velocity)
 	bullet.target_player()
 	get_tree().get_root().add_child(bullet)
+	
 
 
 func _on_Hurtbox_area_entered(bullet):
