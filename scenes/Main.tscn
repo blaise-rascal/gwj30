@@ -12,7 +12,7 @@ script = ExtResource( 4 )
 [node name="LevelOne" parent="." instance=ExtResource( 2 )]
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
-position = Vector2( 120, 73 )
+position = Vector2( -275, 192 )
 
 [node name="UILayer" type="CanvasLayer" parent="."]
 
@@ -24,12 +24,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="BulletsLabel" type="Label" parent="UILayer"]
+[node name="RetryLabel" type="Label" parent="UILayer"]
 visible = false
 margin_left = 2.0
 margin_top = 17.0
 margin_right = 42.0
 margin_bottom = 31.0
+text = "GAME OVER! Press R to retry!"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -47,4 +48,7 @@ __meta__ = {
 [node name="BulletTimeDuration" type="Timer" parent="."]
 wait_time = 1.5
 one_shot = true
+
+[node name="PlayerSpawn" type="Position2D" parent="."]
+position = Vector2( -170, 192 )
 [connection signal="timeout" from="BulletTimeDuration" to="." method="_on_BulletTimeDuration_timeout"]

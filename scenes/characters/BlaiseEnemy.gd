@@ -15,6 +15,7 @@ export var baserotation = 0
 func _ready():
 	for child in get_children():
 		if(child.is_in_group("BaseRotates")):
+			child.position = child.position.rotated(rotation_degrees*PI/180)
 			child.rotation_degrees = baserotation
 
 
@@ -51,12 +52,14 @@ func _physics_process(delta):
 				#The player just came into view!
 				$ShootTimer.start()
 				player_in_sight = true
+				$anims.play("hostile")
+			#The player has been in view for a while!
 			$BulletSpawn.position = Vector2($BulletSpawn.position.length(),0).rotated(find_target(get_parent().get_parent().get_node("Player").global_position))
 			$Barrel.global_rotation = find_target(get_parent().get_parent().get_node("Player").global_position)
 		else:
 			if(player_in_sight == true):
 				#The player just went out of view!
-
+				$anims.play("idle")
 				$Barrel.global_rotation = baserotation*PI/180
 				player_in_sight = false
 				$ShootTimer.stop()
@@ -80,3 +83,10 @@ func _on_Hurtbox_area_entered(bullet):
 	if(alive):
 		hurt(bullet.DAMAGE)
 	bullet.queue_free()
+
+
+func respawn():
+	health = MAX_HEALTH
+	alive = true
+	$anims.play("idle")
+	

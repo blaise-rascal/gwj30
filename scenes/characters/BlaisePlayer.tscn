@@ -63,11 +63,14 @@ position = Vector2( 0, -8 )
 shape = SubResource( 2 )
 
 [node name="CameraPosition" type="Position2D" parent="."]
-position = Vector2( 0, -36 )
+position = Vector2( 0, -50 )
 
 [node name="Camera2D" type="Camera2D" parent="CameraPosition"]
 current = true
 smoothing_enabled = true
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="HeartbeatDetector" type="Area2D" parent="."]
 position = Vector2( 0, -16 )

@@ -12,7 +12,7 @@ const WALL_JUMP_VERTICAL_VELOCITY : int = 250 # Pixels/second
 const WALL_JUMP_HORIZONTAL_VELOCITY : int = 260 # Pixels/second
 const REGULAR_GRAVITY : int = 2000 #Pixels/second2
 const GRAVITY_WITH_UP_HELD : int = 1000 #Pixels/second2
-const DEFAULT_CAMERA_POSITION = Vector2(0,-20)
+const DEFAULT_CAMERA_POSITION = Vector2(0,-50)
 const HEARTBEAT_INC : int = 50 # Heartbeat/second
 const HEARTBEAT_RADIUS : int = 120 # Maximum distance from enemy where heartbeat is generated
 const HEARTBEAT_DECREASE_AMOUNT : int = 5 # Decrease in heartbeat per second when not near enemies
@@ -20,7 +20,6 @@ const DASH_SPEED : int = 400 # Pixels / second
 #TODO: maybe increase gravity if you hold down? like celeste?
 
 const MAX_HEALTH = 100
-const MAX_BULLETS = 6
 
 onready var on_ground = $OnGround
 onready var on_ground_left = $OnGroundLeft
@@ -33,7 +32,6 @@ onready var heartbeat_detection = $HeartbeatDetector
 onready var dash_timer = $DashTimer
 
 var health = MAX_HEALTH
-var bullets = MAX_BULLETS
 var velocity = Vector2()
 var facing_direction = 1 # 1 is right, -1 is left
 var dashing = false
@@ -42,7 +40,7 @@ var bulletready = true
 
 
 func die():
-	get_tree().quit()   
+	get_tree().get_root().get_node("Main").game_over()
 
 
 func hurt(damage):
@@ -58,11 +56,11 @@ func is_on_ground():
 
 func _process(delta):
 	if(Input.is_action_pressed("pancamera")):
-		var PanAlongVector = get_local_mouse_position() - Globals.ADJUSTMENT_TO_CENTER_OF_PLAYER - DEFAULT_CAMERA_POSITION
+		var PanAlongVector = get_local_mouse_position() - Globals.ADJUSTMENT_TO_CENTER_OF_PLAYER + DEFAULT_CAMERA_POSITION
 		#$CameraPosition.position = Vector2(PanAlongVector.length()*.5,0).rotated(_get_angle_from_sprite_center_to_mouse())
 		$CameraPosition.position = PanAlongVector*.5
 	else:
-		$CameraPosition.position = DEFAULT_CAMERA_POSITION #+ velocity / 5
+		$CameraPosition.position = DEFAULT_CAMERA_POSITION + velocity / 5
 	
 	
 	# Increment heartbeat based on each nearby enemy
@@ -88,26 +86,26 @@ func _physics_process(delta):
 		
 		#ACCELERATION IS CALCULATED EVERY FRAME FROM SCRATCH
 		#VELOCITY IS PRESERVED FROM FRAME TO FRAME, BUT MODIFIED BY ACCELERATION (AND SOMETIMES SET EXPLICITY, LIKE WHEN YOU JUMP)
-		
-		if Input.is_action_pressed("right"): #TODO: Make it so that it only adds walk acceleration if the velocity is not too high already (rather than handling this case later on)
-			acceleration.x = LEFT_RIGHT_ACCELERATION
-			facing_direction = 1
-		if Input.is_action_pressed("left"):
-			acceleration.x = -LEFT_RIGHT_ACCELERATION
-			facing_direction = -1
-		if Input.is_action_just_pressed("jump"):
-			if is_on_ground():
-				velocity.y = -JUMP_VERTICAL_VELOCITY
-			elif on_left_wall.is_colliding():
-				velocity.y = -WALL_JUMP_VERTICAL_VELOCITY
-				velocity.x = WALL_JUMP_HORIZONTAL_VELOCITY
-			elif on_right_wall.is_colliding():
-				velocity.y = -WALL_JUMP_VERTICAL_VELOCITY
-				velocity.x = -WALL_JUMP_HORIZONTAL_VELOCITY
+		if(Globals.gameover == false):
+			if Input.is_action_pressed("right"):
+				acceleration.x = LEFT_RIGHT_ACCELERATION
+				facing_direction = 1
+			if Input.is_action_pressed("left"):
+				acceleration.x = -LEFT_RIGHT_ACCELERATION
+				facing_direction = -1
+			if Input.is_action_just_pressed("jump"):
+				if is_on_ground():
+					velocity.y = -JUMP_VERTICAL_VELOCITY
+				elif on_left_wall.is_colliding():
+					velocity.y = -WALL_JUMP_VERTICAL_VELOCITY
+					velocity.x = WALL_JUMP_HORIZONTAL_VELOCITY
+				elif on_right_wall.is_colliding():
+					velocity.y = -WALL_JUMP_VERTICAL_VELOCITY
+					velocity.x = -WALL_JUMP_HORIZONTAL_VELOCITY
 
 		
 		# Apply gravity
-		if(Input.is_action_pressed("jump") && velocity.y<0): #If you're jumping and the up button is held, make gravity lower
+		if(Input.is_action_pressed("jump") && velocity.y<0 && Globals.gameover == false): #If you're jumping and the up button is held, make gravity lower
 			acceleration.y = GRAVITY_WITH_UP_HELD
 		else:
 			acceleration.y = REGULAR_GRAVITY
@@ -143,26 +141,27 @@ func _physics_process(delta):
 
 
 func _unhandled_input(event):
-	if event.is_action_pressed("shoot"):
-		if bulletready:
-			bulletready = false
-			$ReloadTimer.start()
-			var bullet = BULLET.instance()
-			var adjustedglobalposition = global_position + Globals.ADJUSTMENT_TO_CENTER_OF_PLAYER
-			#var adjustedlocalposition = position + Globals.ADJUSTMENT_TO_CENTER_OF_PLAYER
-			bullet.global_position = adjustedglobalposition
-			
-			bullet.global_rotation = _get_angle_from_sprite_center_to_mouse()
-			print(get_local_mouse_position())
-			bullet.target_enemy()
-			get_tree().get_root().add_child(bullet)
-	
-	if event.is_action_pressed("dash") and Globals.heartbeat > 10:
-		dashing = true
-		dash_direction = Vector2(int(Input.is_action_pressed("right")) - int(Input.is_action_pressed("left")), 
-								int(Input.is_action_pressed("down")) - int(Input.is_action_pressed("up"))).normalized()
-		dash_timer.start()
-		Globals.heartbeat -= 10
+	if(Globals.gameover == false):
+		if event.is_action_pressed("shoot"):
+			if bulletready:
+				bulletready = false
+				$ReloadTimer.start()
+				var bullet = BULLET.instance()
+				var adjustedglobalposition = global_position + Globals.ADJUSTMENT_TO_CENTER_OF_PLAYER
+				#var adjustedlocalposition = position + Globals.ADJUSTMENT_TO_CENTER_OF_PLAYER
+				bullet.global_position = adjustedglobalposition
+				
+				bullet.global_rotation = _get_angle_from_sprite_center_to_mouse()
+				print(get_local_mouse_position())
+				bullet.target_enemy()
+				get_tree().get_root().add_child(bullet)
+		
+		if event.is_action_pressed("dash") and Globals.heartbeat > 10:
+			dashing = true
+			dash_direction = Vector2(int(Input.is_action_pressed("right")) - int(Input.is_action_pressed("left")), 
+									int(Input.is_action_pressed("down")) - int(Input.is_action_pressed("up"))).normalized()
+			dash_timer.start()
+			Globals.heartbeat -= 10
 
 func _on_Hurtbox_area_entered(bullet):
 	hurt(bullet.DAMAGE)

@@ -4,9 +4,11 @@
 [ext_resource path="res://scenes/characters/BlaiseBullet.gd" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 2, 2 )
+extents = Vector2( 1, 1 )
 
-[node name="BlaiseBullet" type="Area2D"]
+[node name="BlaiseBullet" type="Area2D" groups=[
+"Bullets",
+]]
 z_index = 200
 z_as_relative = false
 collision_layer = 0
