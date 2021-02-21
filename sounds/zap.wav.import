@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/zap.wav-2577dd1e15a2a722ee94854b76c70b00.sample"
+
+[deps]
+
+source_file="res://sounds/zap.wav"
+dest_files=[ "res://.import/zap.wav-2577dd1e15a2a722ee94854b76c70b00.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0
