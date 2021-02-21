@@ -20,7 +20,7 @@ func _process(delta):
 func _update_ui():
 	$UILayer/HPLabel.text = "HP: " + str($Player.health)
 #	$UILayer/BulletsLabel.text = "Bullets: " + str($Player.)
-	$UILayer/HeartbeatLabel.text = "Heartbeat: " + str(Globals.heartbeat)
+	$UILayer/HeartbeatLabel.text = "Heartbeat: " + str(int(Globals.visible_heartbeat()))
 
 func _unhandled_input(event):
 	if event.is_action_pressed("bullettime") && Globals.bullettime == false && Globals.heartbeat > 70 && Globals.gameover == false:
