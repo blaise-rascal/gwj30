@@ -25,8 +25,8 @@ func beat_loud():
 	$HeartbeatSound.volume_db = 0
 	$HeartbeatSound.play()
 
-func beat(audible):
-	if audible:
+func beat(loud):
+	if loud:
 		beat_loud()
 	else:
 		beat_quiet()
