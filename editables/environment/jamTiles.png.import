@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/background-tile-2.png-16d335db2f4b5fa7dbc5303abf59a354.stex"
+path="res://.import/jamTiles.png-9c8d639683f705473c3274395a96c7c4.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://textures/environment/background-tile-2.png"
-dest_files=[ "res://.import/background-tile-2.png-16d335db2f4b5fa7dbc5303abf59a354.stex" ]
+source_file="res://editables/environment/jamTiles.png"
+dest_files=[ "res://.import/jamTiles.png-9c8d639683f705473c3274395a96c7c4.stex" ]
 
 [params]
 
@@ -19,7 +19,7 @@ compress/lossy_quality=0.7
 compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
-flags/repeat=1
+flags/repeat=0
 flags/filter=false
 flags/mipmaps=false
 flags/anisotropic=false
