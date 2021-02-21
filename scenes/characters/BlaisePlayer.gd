@@ -37,6 +37,7 @@ var facing_direction = 1 # 1 is right, -1 is left
 var dashing = false
 var dash_direction = Vector2()
 var bulletready = true
+var is_walking = false
 
 
 func die():
@@ -105,7 +106,11 @@ func _physics_process(delta):
 					velocity.y = -WALL_JUMP_VERTICAL_VELOCITY
 					velocity.x = -WALL_JUMP_HORIZONTAL_VELOCITY
 
-		
+		if(acceleration.x == 0):
+			is_walking = false
+		else:
+			is_walking = true
+				
 		# Apply gravity
 		if(Input.is_action_pressed("jump") && velocity.y<0 && Globals.gameover == false): #If you're jumping and the up button is held, make gravity lower
 			acceleration.y = GRAVITY_WITH_UP_HELD
@@ -114,7 +119,6 @@ func _physics_process(delta):
 		
 		#Apply drag
 		if acceleration.x == 0:
-			$anims.play("idle")
 			#VELOCITY_TO_STOP_DRAGGING is the (very slow) speed where, if the player is moving below that speed, their velocity is set to zero.
 			#Used to prevent rapid switching of directions when they coast to a halt.
 			if(abs(velocity.x) > VELOCITY_TO_STOP_DRAGGING) :
@@ -131,10 +135,6 @@ func _physics_process(delta):
 			elif(acceleration.x <0):
 				$PlayerSprite.flip_h=true
 				$ShootSprite.flip_h=true
-			if(is_on_ground()):
-				$anims.play("idle")
-			else:
-				$anims.play("walk")
 		
 		# Apply acceleration
 		if acceleration.length() > 0:
@@ -142,7 +142,14 @@ func _physics_process(delta):
 			#Clamp velocity to max
 			if(abs(velocity.x) > MAX_SPEED):
 				velocity.x = clamp(velocity.x, -1, 1) * MAX_SPEED
-	
+
+		if(Globals.gameover == true):
+			$anims.play("die")
+		else:
+			if(is_walking && is_on_ground()):
+				$anims.play("walk")
+			else:
+				$anims.play("idle")
 	
 	velocity = move_and_slide(velocity, Vector2(0, -1))
 

@@ -13,7 +13,7 @@ extents = Vector2( 7, 7 )
 [sub_resource type="CircleShape2D" id=3]
 radius = 8.0
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=4]
 resource_name = "die"
 tracks/0/type = "value"
 tracks/0/path = NodePath("PlayerSprite:frame")
@@ -28,8 +28,7 @@ tracks/0/keys = {
 "values": [ 3 ]
 }
 
-[sub_resource type="Animation" id=4]
-resource_name = "idle"
+[sub_resource type="Animation" id=5]
 tracks/0/type = "value"
 tracks/0/path = NodePath("PlayerSprite:frame")
 tracks/0/interp = 1
@@ -43,8 +42,7 @@ tracks/0/keys = {
 "values": [ 0 ]
 }
 
-[sub_resource type="Animation" id=5]
-resource_name = "walk"
+[sub_resource type="Animation" id=6]
 length = 0.4
 loop = true
 tracks/0/type = "value"
@@ -60,8 +58,7 @@ tracks/0/keys = {
 "values": [ 1, 0, 2, 0 ]
 }
 
-[sub_resource type="Animation" id=6]
-resource_name = "idle"
+[sub_resource type="Animation" id=7]
 tracks/0/type = "value"
 tracks/0/path = NodePath("ShootSprite:visible")
 tracks/0/interp = 1
@@ -75,8 +72,7 @@ tracks/0/keys = {
 "values": [ false ]
 }
 
-[sub_resource type="Animation" id=7]
-resource_name = "shoot"
+[sub_resource type="Animation" id=8]
 length = 0.1
 tracks/0/type = "value"
 tracks/0/path = NodePath("ShootSprite:visible")
@@ -102,7 +98,7 @@ position = Vector2( 1, -8 )
 scale = Vector2( 1.5, 1.4 )
 texture = ExtResource( 1 )
 hframes = 5
-frame = 1
+frame = 3
 
 [node name="ShootSprite" type="Sprite" parent="."]
 position = Vector2( 1, -8 )
@@ -193,14 +189,14 @@ pitch_scale = 1.62
 
 [node name="anims" type="AnimationPlayer" parent="."]
 autoplay = "idle"
-anims/die = SubResource( 8 )
-anims/idle = SubResource( 4 )
-anims/walk = SubResource( 5 )
+anims/die = SubResource( 4 )
+anims/idle = SubResource( 5 )
+anims/walk = SubResource( 6 )
 
 [node name="gunanims" type="AnimationPlayer" parent="."]
 autoplay = "idle"
-anims/idle = SubResource( 6 )
-anims/shoot = SubResource( 7 )
+anims/idle = SubResource( 7 )
+anims/shoot = SubResource( 8 )
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
 [connection signal="timeout" from="DashTimer" to="." method="_on_DashTimer_timeout"]
 [connection signal="timeout" from="ReloadTimer" to="." method="_on_ReloadTimer_timeout"]
