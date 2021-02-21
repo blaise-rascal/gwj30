@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tilesetJam2.png-5de9e0768cc3e7d9b576133a14f48a67.stex"
+path="res://.import/tilesetJam2.png-0d3a7019f9e80e7a20a55d31ad4b6c4a.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://editables/tilesetJam2.png"
-dest_files=[ "res://.import/tilesetJam2.png-5de9e0768cc3e7d9b576133a14f48a67.stex" ]
+source_file="res://editables/environment/tilesetJam2.png"
+dest_files=[ "res://.import/tilesetJam2.png-0d3a7019f9e80e7a20a55d31ad4b6c4a.stex" ]
 
 [params]
 

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/jamTiles.png-c6fa3b62ce2420f56a5afbba659fa5d8.stex"
+path="res://.import/original-tileset.png-00f47eef7fde226e553f27005e073fa2.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://editables/jamTiles.png"
-dest_files=[ "res://.import/jamTiles.png-c6fa3b62ce2420f56a5afbba659fa5d8.stex" ]
+source_file="res://editables/environment/original-tileset.png"
+dest_files=[ "res://.import/original-tileset.png-00f47eef7fde226e553f27005e073fa2.stex" ]
 
 [params]
 
