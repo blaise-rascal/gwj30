@@ -6,6 +6,9 @@ const HEARTBEAT_GIVER = preload("res://scenes/characters/HeartbeatGiver.tscn")
 export (Vector2) var VELOCITY = Vector2(500, 0)
 export (int) var DAMAGE = 20
 
+func _ready():
+	$ShootSound.play()
+
 
 func _physics_process(delta):
 	global_position += (VELOCITY * delta).rotated(global_rotation)

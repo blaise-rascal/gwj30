@@ -21,6 +21,7 @@ func _ready():
 
 
 func die():
+	$ExplodeSound.play()
 	alive = false
 	$ShootTimer.stop()
 	$anims.play("die")

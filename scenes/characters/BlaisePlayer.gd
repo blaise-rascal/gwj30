@@ -44,6 +44,7 @@ func die():
 
 
 func hurt(damage):
+	$hurtsound.play()
 	health -= damage
 	if health <= 0:
 		die()

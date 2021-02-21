@@ -4,7 +4,6 @@ extends Node2D
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
-var bullettime = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -24,11 +23,13 @@ func _update_ui():
 	$UILayer/HeartbeatLabel.text = "Heartbeat: " + str(Globals.heartbeat)
 
 func _unhandled_input(event):
-	if event.is_action_pressed("bullettime") && bullettime == false && Globals.heartbeat > 70 && Globals.gameover == false:
+	if event.is_action_pressed("bullettime") && Globals.bullettime == false && Globals.heartbeat > 70 && Globals.gameover == false:
 		$CanvasModulate.set_color(Color(0.8,0.8,1))
 		Engine.time_scale = Globals.SLOW_TIME_SCALE
 		$BulletTimeDuration.start()
 		Globals.heartbeat = 30
+		Globals.bullettime = true
+		$Player/ReloadTimer.wait_time = 0.25*Globals.SLOW_TIME_SCALE
 		
 	if(Globals.gameover == true && event.is_action_pressed("restart")):
 		_restart_game()
@@ -36,13 +37,17 @@ func _unhandled_input(event):
 
 func _on_BulletTimeDuration_timeout():
 	Engine.time_scale = 1
+	Globals.bullettime = false
+	$Player/ReloadTimer.wait_time = 0.25
 	$CanvasModulate.set_color(Color(1,1,1))
 	
 func game_over():
-	$UILayer/HPLabel.visible = false
-	Globals.gameover = true
-	$UILayer/RetryLabel.visible = true
-	#print("GAME OVER")
+	if(Globals.gameover == false):
+		$LoseSound.play()
+		$UILayer/HPLabel.visible = false
+		Globals.gameover = true
+		$UILayer/RetryLabel.visible = true
+		#print("GAME OVER")
 
 func _restart_game():
 	
