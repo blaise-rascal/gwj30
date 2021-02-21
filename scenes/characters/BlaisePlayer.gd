@@ -15,7 +15,7 @@ const GRAVITY_WITH_UP_HELD : int = 1000 #Pixels/second2
 const DEFAULT_CAMERA_POSITION = Vector2(0,-50)
 const HEARTBEAT_INC : int = 50 # Heartbeat/second
 const HEARTBEAT_RADIUS : int = 120 # Maximum distance from enemy where heartbeat is generated
-const HEARTBEAT_DECREASE_AMOUNT : int = 5 # Decrease in heartbeat per second when not near enemies
+const HEARTBEAT_DECREASE_AMOUNT : int = 3 # Decrease in heartbeat per second when not near enemies
 const DASH_SPEED : int = 400 # Pixels / second
 #TODO: maybe increase gravity if you hold down? like celeste?
 
