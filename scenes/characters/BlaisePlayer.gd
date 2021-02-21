@@ -60,7 +60,7 @@ func _process(delta):
 		#$CameraPosition.position = Vector2(PanAlongVector.length()*.5,0).rotated(_get_angle_from_sprite_center_to_mouse())
 		$CameraPosition.position = PanAlongVector*.5
 	else:
-		$CameraPosition.position = DEFAULT_CAMERA_POSITION + velocity / 5
+		$CameraPosition.position = DEFAULT_CAMERA_POSITION + Vector2(velocity.x, 0) / 5
 	
 	
 	# Increment heartbeat based on each nearby enemy
