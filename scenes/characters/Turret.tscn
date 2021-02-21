@@ -7,7 +7,7 @@
 [ext_resource path="res://sounds/explode.wav" type="AudioStream" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 8, 8 )
+extents = Vector2( 8, 10 )
 
 [sub_resource type="Animation" id=2]
 resource_name = "die"
@@ -156,6 +156,7 @@ position = Vector2( 0, 0.5 )
 texture = ExtResource( 2 )
 offset = Vector2( 0, 0.5 )
 hframes = 5
+frame = 4
 
 [node name="Base" type="Sprite" parent="." groups=[
 "BaseRotates",
@@ -164,6 +165,7 @@ position = Vector2( 0, 0.5 )
 texture = ExtResource( 3 )
 offset = Vector2( 0, 0.5 )
 hframes = 3
+frame = 2
 
 [node name="ShootTimer" type="Timer" parent="."]
 wait_time = 0.7
@@ -195,6 +197,7 @@ z_as_relative = false
 texture = ExtResource( 4 )
 offset = Vector2( 7, -2 )
 hframes = 4
+frame = 3
 
 [node name="BulletSpawn" type="Position2D" parent="."]
 position = Vector2( 22, 0 )
