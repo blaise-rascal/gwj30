@@ -16,6 +16,8 @@ var heartbeat = 0
 func _ready():
 	pass # Replace with function body.
 
+func visible_heartbeat():
+	return 80 + 0.9 * heartbeat
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

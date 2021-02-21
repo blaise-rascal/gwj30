@@ -37,8 +37,9 @@ shader_param/yShift = SubResource( 4 )
 motion_scale = Vector2( 0.8, 0.8 )
 
 [node name="CaveWall" type="Sprite" parent="RepeatingBackground/ParallaxLayer"]
-position = Vector2( -260, -82 )
+position = Vector2( -316, -82 )
 texture = ExtResource( 9 )
+centered = false
 region_enabled = true
 region_rect = Rect2( 100, 100, 2000, 2000 )
 
