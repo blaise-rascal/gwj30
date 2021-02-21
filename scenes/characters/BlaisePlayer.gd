@@ -38,6 +38,8 @@ var velocity = Vector2()
 var facing_direction = 1 # 1 is right, -1 is left
 var dashing = false
 var dash_direction = Vector2()
+var bulletready = true
+
 
 func die():
 	get_tree().quit()   
@@ -142,16 +144,18 @@ func _physics_process(delta):
 
 func _unhandled_input(event):
 	if event.is_action_pressed("shoot"):
-		print("PLAYER SHOOTING")
-		var bullet = BULLET.instance()
-		var adjustedglobalposition = global_position + Globals.ADJUSTMENT_TO_CENTER_OF_PLAYER
-		#var adjustedlocalposition = position + Globals.ADJUSTMENT_TO_CENTER_OF_PLAYER
-		bullet.global_position = adjustedglobalposition
-		
-		bullet.global_rotation = _get_angle_from_sprite_center_to_mouse()
-		print(get_local_mouse_position())
-		bullet.target_enemy()
-		get_tree().get_root().add_child(bullet)
+		if bulletready:
+			bulletready = false
+			$ReloadTimer.start()
+			var bullet = BULLET.instance()
+			var adjustedglobalposition = global_position + Globals.ADJUSTMENT_TO_CENTER_OF_PLAYER
+			#var adjustedlocalposition = position + Globals.ADJUSTMENT_TO_CENTER_OF_PLAYER
+			bullet.global_position = adjustedglobalposition
+			
+			bullet.global_rotation = _get_angle_from_sprite_center_to_mouse()
+			print(get_local_mouse_position())
+			bullet.target_enemy()
+			get_tree().get_root().add_child(bullet)
 	
 	if event.is_action_pressed("dash") and Globals.heartbeat > 10:
 		dashing = true
@@ -168,3 +172,7 @@ func _on_Hurtbox_area_entered(bullet):
 
 func _on_DashTimer_timeout():
 	dashing = false
+
+
+func _on_ReloadTimer_timeout():
+	bulletready = true
