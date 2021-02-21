@@ -47,6 +47,7 @@ func hurt(damage):
 	$hurtsound.play()
 	health -= damage
 	if health <= 0:
+		$anims.play("die")
 		die()
 
 
@@ -113,7 +114,7 @@ func _physics_process(delta):
 		
 		#Apply drag
 		if acceleration.x == 0:
-			#$CharAnims.play("idle")
+			$anims.play("idle")
 			#VELOCITY_TO_STOP_DRAGGING is the (very slow) speed where, if the player is moving below that speed, their velocity is set to zero.
 			#Used to prevent rapid switching of directions when they coast to a halt.
 			if(abs(velocity.x) > VELOCITY_TO_STOP_DRAGGING) :
@@ -123,12 +124,17 @@ func _physics_process(delta):
 					acceleration.x = -AIR_DRAG_DECELERATION * clamp(velocity.x, -1, 1)
 			else:
 				velocity.x = 0
-	#	else:
-	#		if(acceleration.x >0):
-	#			$Sprite.flip_h=true
-	#		elif(acceleration.x <0):
-	#			$Sprite.flip_h=false
-	#		$CharAnims.play("walk")
+		else:
+			if(acceleration.x >0):
+				$PlayerSprite.flip_h=false
+				$ShootSprite.flip_h=false
+			elif(acceleration.x <0):
+				$PlayerSprite.flip_h=true
+				$ShootSprite.flip_h=true
+			if(is_on_ground()):
+				$anims.play("idle")
+			else:
+				$anims.play("walk")
 		
 		# Apply acceleration
 		if acceleration.length() > 0:
@@ -145,6 +151,7 @@ func _unhandled_input(event):
 	if(Globals.gameover == false):
 		if event.is_action_pressed("shoot"):
 			if bulletready:
+				$gunanims.play("shoot")
 				bulletready = false
 				$ReloadTimer.start()
 				var bullet = BULLET.instance()

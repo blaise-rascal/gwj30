@@ -50,7 +50,8 @@ func game_over():
 		#print("GAME OVER")
 
 func _restart_game():
-	
+	$Player/anims.play("idle")
+	$Player/gunanims.play("idle")
 	$Player.health = $Player.MAX_HEALTH
 	$Player.position = $PlayerSpawn.position
 	Globals.gameover = false
