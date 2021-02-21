@@ -61,3 +61,10 @@ func _restart_game():
 	get_tree().call_group("Enemies", "respawn")
 	get_tree().call_group("Bullets", "queue_free")
 	#reset heartbeat, reset health of player and enemies, despawn bullets, set location of player, set enemies to alive
+
+
+func _on_WinArea_body_entered(body):
+	if(body == get_node("Player")):
+		$UILayer/RetryLabel.text = "YOU MANAGED TO ESCAPE! GAME OVER"
+		$UILayer/RetryLabel.visible = true
+		get_tree().paused = true # Replace with function body.
