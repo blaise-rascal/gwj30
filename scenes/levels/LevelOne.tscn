@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://scenes/tilesets/TilesetOne.tres" type="TileSet" id=1]
 [ext_resource path="res://scenes/tilesets/Backgrounds.tres" type="TileSet" id=2]
@@ -8,6 +8,8 @@
 [ext_resource path="res://textures/doodads/doodads-shelf.png" type="Texture" id=6]
 [ext_resource path="res://textures/doodads/doodads-crates.png" type="Texture" id=7]
 [ext_resource path="res://textures/doodads/doodads-crate.png" type="Texture" id=8]
+[ext_resource path="res://textures/environment/background-tile-2.png" type="Texture" id=9]
+[ext_resource path="res://textures/doodads/doodads-computer.png" type="Texture" id=10]
 
 [sub_resource type="OpenSimplexNoise" id=1]
 
@@ -28,6 +30,17 @@ shader_param/xShift = SubResource( 2 )
 shader_param/yShift = SubResource( 4 )
 
 [node name="LevelOne" type="Node2D"]
+
+[node name="RepeatingBackground" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="RepeatingBackground"]
+motion_scale = Vector2( 0.8, 0.8 )
+
+[node name="CaveWall" type="Sprite" parent="RepeatingBackground/ParallaxLayer"]
+position = Vector2( 0, -2 )
+texture = ExtResource( 9 )
+region_enabled = true
+region_rect = Rect2( 100, 100, 2000, 2000 )
 
 [node name="BackgroundLayer" type="TileMap" parent="."]
 position = Vector2( -200, 0 )
@@ -61,6 +74,7 @@ tile_data = PoolIntArray( -917575, 5, 0, -917574, 5, 3, -917573, 5, 3, -917572, 
 
 [node name="Computer" type="Sprite" parent="."]
 position = Vector2( 392, 168 )
+texture = ExtResource( 10 )
 
 [node name="FilingCabinet" type="Sprite" parent="."]
 position = Vector2( -191, 168 )
