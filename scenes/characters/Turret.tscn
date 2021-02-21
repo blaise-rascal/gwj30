@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scenes/characters/BlaiseEnemy.gd" type="Script" id=1]
 [ext_resource path="res://textures/characters/turret-barrel-sheet.png" type="Texture" id=2]
@@ -56,7 +56,22 @@ tracks/3/keys = {
 "times": PoolRealArray( 0, 0.1 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 1,
-"values": [ 0, 1 ]
+"values": [ 0, 2 ]
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "hostile"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Base:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
 }
 
 [sub_resource type="Animation" id=3]
@@ -72,6 +87,30 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 1,
 "values": [ 0 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Explosion:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Base:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 1 ]
 }
 
 [sub_resource type="Animation" id=4]
@@ -104,7 +143,9 @@ tracks/1/keys = {
 } ]
 }
 
-[node name="Turret" type="Node2D"]
+[node name="Turret" type="Node2D" groups=[
+"Enemies",
+]]
 z_index = 300
 z_as_relative = false
 script = ExtResource( 1 )
@@ -114,6 +155,7 @@ script = ExtResource( 1 )
 ]]
 position = Vector2( 0, 0.5 )
 texture = ExtResource( 2 )
+offset = Vector2( 0, 0.5 )
 hframes = 5
 
 [node name="Base" type="Sprite" parent="." groups=[
@@ -121,13 +163,16 @@ hframes = 5
 ]]
 position = Vector2( 0, 0.5 )
 texture = ExtResource( 3 )
-hframes = 2
+offset = Vector2( 0, 0.5 )
+hframes = 3
 
 [node name="ShootTimer" type="Timer" parent="."]
-wait_time = 1.5
+wait_time = 0.7
 autostart = true
 
-[node name="Hurtbox" type="Area2D" parent="."]
+[node name="Hurtbox" type="Area2D" parent="." groups=[
+"BaseRotates",
+]]
 collision_layer = 0
 collision_mask = 8
 
@@ -138,6 +183,7 @@ shape = SubResource( 1 )
 [node name="anims" type="AnimationPlayer" parent="."]
 autoplay = "idle"
 anims/die = SubResource( 2 )
+anims/hostile = SubResource( 5 )
 anims/idle = SubResource( 3 )
 anims/shoot = SubResource( 4 )
 
@@ -150,5 +196,15 @@ z_as_relative = false
 texture = ExtResource( 4 )
 offset = Vector2( 7, -2 )
 hframes = 4
+
+[node name="BulletSpawn" type="Position2D" parent="."]
+position = Vector2( 22, 0 )
+
+[node name="PlayerDetector" type="RayCast2D" parent="."]
+position = Vector2( 4, 0 )
+enabled = true
+cast_to = Vector2( 200, 0 )
+collision_mask = 512
+collide_with_areas = true
 [connection signal="timeout" from="ShootTimer" to="." method="_on_ShootTimer_timeout"]
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
