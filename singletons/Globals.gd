@@ -6,6 +6,7 @@ var SLOW_TIME_SCALE : float = 0.25 # When heartbeat mode is activated, the world
 var PLAYER_TIME_SCALE : float = 2  # But the player is adjusted to move at 2x speed, so they move at 0.5x speed overall
 var ADJUSTMENT_TO_CENTER_OF_PLAYER = Vector2(0,-8)
 var gameover = false
+var bullettime = false
 #In
 # var b = "text"
 

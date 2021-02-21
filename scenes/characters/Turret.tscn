@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://scenes/characters/BlaiseEnemy.gd" type="Script" id=1]
 [ext_resource path="res://textures/characters/turret-barrel-sheet.png" type="Texture" id=2]
 [ext_resource path="res://textures/characters/turret-base-sheet.png" type="Texture" id=3]
 [ext_resource path="res://textures/effects/explosion-sheet.png" type="Texture" id=4]
+[ext_resource path="res://sounds/explode.wav" type="AudioStream" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 8, 8 )
@@ -59,7 +60,7 @@ tracks/3/keys = {
 "values": [ 0, 2 ]
 }
 
-[sub_resource type="Animation" id=5]
+[sub_resource type="Animation" id=3]
 resource_name = "hostile"
 tracks/0/type = "value"
 tracks/0/path = NodePath("Base:frame")
@@ -74,8 +75,7 @@ tracks/0/keys = {
 "values": [ 0 ]
 }
 
-[sub_resource type="Animation" id=3]
-resource_name = "idle"
+[sub_resource type="Animation" id=4]
 tracks/0/type = "value"
 tracks/0/path = NodePath("Barrel:frame")
 tracks/0/interp = 1
@@ -113,8 +113,7 @@ tracks/2/keys = {
 "values": [ 1 ]
 }
 
-[sub_resource type="Animation" id=4]
-resource_name = "shoot"
+[sub_resource type="Animation" id=5]
 length = 0.4
 tracks/0/type = "value"
 tracks/0/path = NodePath("Barrel:frame")
@@ -183,9 +182,9 @@ shape = SubResource( 1 )
 [node name="anims" type="AnimationPlayer" parent="."]
 autoplay = "idle"
 anims/die = SubResource( 2 )
-anims/hostile = SubResource( 5 )
-anims/idle = SubResource( 3 )
-anims/shoot = SubResource( 4 )
+anims/hostile = SubResource( 3 )
+anims/idle = SubResource( 4 )
+anims/shoot = SubResource( 5 )
 
 [node name="Explosion" type="Sprite" parent="." groups=[
 "BaseRotates",
@@ -206,5 +205,8 @@ enabled = true
 cast_to = Vector2( 200, 0 )
 collision_mask = 512
 collide_with_areas = true
+
+[node name="ExplodeSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 5 )
 [connection signal="timeout" from="ShootTimer" to="." method="_on_ShootTimer_timeout"]
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]
