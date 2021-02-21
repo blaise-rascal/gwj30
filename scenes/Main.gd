@@ -28,6 +28,7 @@ func _unhandled_input(event):
 		Engine.time_scale = Globals.SLOW_TIME_SCALE
 		$BulletTimeDuration.start()
 		Globals.heartbeat = 30
+		AudioServer.set_bus_effect_enabled(0, 0, true)
 		Globals.bullettime = true
 		$Player/ReloadTimer.wait_time = 0.25*Globals.SLOW_TIME_SCALE
 		
@@ -38,6 +39,7 @@ func _unhandled_input(event):
 func _on_BulletTimeDuration_timeout():
 	Engine.time_scale = 1
 	Globals.bullettime = false
+	AudioServer.set_bus_effect_enabled(0, 0, false)
 	$Player/ReloadTimer.wait_time = 0.25
 	$CanvasModulate.set_color(Color(1,1,1))
 	
