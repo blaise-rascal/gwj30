@@ -14,5 +14,9 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
-func beat():
+func beat_silent():
 	$anims.play("beat")
+
+func beat_loud():
+	$anims.play("beat")
+	$HeartbeatSound.play()
