@@ -6,8 +6,9 @@ const ESTIMATED_BULLET_TIME : float = 0.18 # estimated time for bullet to hit pl
 
 const MAX_HEALTH = 20
 var health = MAX_HEALTH
-var current_rotation_speed = 0
 var alive = true
+var player_in_sight = true
+
 #The export vars are used to differentiate the different enemies
 export var baserotation = 0
 
@@ -15,6 +16,8 @@ func _ready():
 	for child in get_children():
 		if(child.is_in_group("BaseRotates")):
 			child.rotation_degrees = baserotation
+
+
 
 func die():
 	alive = false
@@ -30,7 +33,7 @@ func hurt(damage):
 
 
 # Find the position to target
-func find_target(player_pos, player_vel):
+func find_target(player_pos):
 	var target_position = player_pos + Globals.ADJUSTMENT_TO_CENTER_OF_PLAYER
 	return atan2((target_position.y - global_position.y), (target_position.x - global_position.x))
 
@@ -40,16 +43,34 @@ func _physics_process(delta):
 	#$RotatingPart.rotate(find_target(get_parent().get_parent().get_node("Player").global_position, get_parent().get_parent().get_node("Player").velocity))
 	
 	if(alive):
-		$Barrel.global_rotation = find_target(get_parent().get_parent().get_node("Player").global_position, get_parent().get_parent().get_node("Player").velocity)
+		$PlayerDetector.position = Vector2($PlayerDetector.position.length(),0).rotated(find_target(get_parent().get_parent().get_node("Player").global_position))
+		$PlayerDetector.global_rotation = find_target(get_parent().get_parent().get_node("Player").global_position)
+		
+		if($PlayerDetector.get_collider() == get_parent().get_parent().get_node("Player/Hurtbox")):
+			if(player_in_sight == false):
+				#The player just came into view!
+				$ShootTimer.start()
+				player_in_sight = true
+			$BulletSpawn.position = Vector2($BulletSpawn.position.length(),0).rotated(find_target(get_parent().get_parent().get_node("Player").global_position))
+			$Barrel.global_rotation = find_target(get_parent().get_parent().get_node("Player").global_position)
+		else:
+			if(player_in_sight == true):
+				#The player just went out of view!
 
+				$Barrel.global_rotation = baserotation*PI/180
+				player_in_sight = false
+				$ShootTimer.stop()
+			
+		
 
 func _on_ShootTimer_timeout():
 	$anims.play("shoot")
 
 func shootbullet():
 	var bullet = BULLET.instance()
-	bullet.global_position = global_position
-	bullet.global_rotation = find_target(get_parent().get_parent().get_node("Player").global_position, get_parent().get_parent().get_node("Player").velocity)
+	print($BulletSpawn.global_position)
+	bullet.global_position = $BulletSpawn.global_position
+	bullet.global_rotation = find_target(get_parent().get_parent().get_node("Player").global_position)
 	bullet.target_player()
 	get_tree().get_root().add_child(bullet)
 	

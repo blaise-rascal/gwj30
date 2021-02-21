@@ -126,7 +126,6 @@ offset = Vector2( 0, 0.5 )
 hframes = 2
 
 [node name="ShootTimer" type="Timer" parent="."]
-wait_time = 1.5
 autostart = true
 
 [node name="Hurtbox" type="Area2D" parent="."]
@@ -152,5 +151,15 @@ z_as_relative = false
 texture = ExtResource( 4 )
 offset = Vector2( 7, -2 )
 hframes = 4
+
+[node name="BulletSpawn" type="Position2D" parent="."]
+position = Vector2( 25, 0 )
+
+[node name="PlayerDetector" type="RayCast2D" parent="."]
+position = Vector2( 4, 0 )
+enabled = true
+cast_to = Vector2( 200, 0 )
+collision_mask = 512
+collide_with_areas = true
 [connection signal="timeout" from="ShootTimer" to="." method="_on_ShootTimer_timeout"]
 [connection signal="area_entered" from="Hurtbox" to="." method="_on_Hurtbox_area_entered"]

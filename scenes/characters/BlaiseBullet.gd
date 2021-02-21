@@ -3,7 +3,7 @@ extends Area2D
 # NEW
 const HEARTBEAT_GIVER = preload("res://scenes/characters/HeartbeatGiver.tscn")
 
-export (Vector2) var VELOCITY = Vector2(700, 0)
+export (Vector2) var VELOCITY = Vector2(500, 0)
 export (int) var DAMAGE = 5
 
 func _physics_process(delta):
@@ -18,4 +18,5 @@ func target_player():
 	add_child(HEARTBEAT_GIVER.instance())
 
 func _on_Bullet_body_entered(body):
+	print(body)
 	queue_free()
